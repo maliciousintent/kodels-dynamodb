@@ -14,7 +14,7 @@ ModelInstance.prototype.save = function() {
 };
 
 ModelInstance.prototype.toString = function() {
-  return this.toObject();
+  return this.toObject().toString();
 };
 
 ModelInstance.prototype.toObject = function() {
@@ -24,18 +24,17 @@ ModelInstance.prototype.toObject = function() {
 
 
 function validateAttributeDefinition(attributeName, attributeDefinition) {
-  if (typeof attributeDefinition === 'function') {
-    // 'getters' are always OK
-    return;
-  }
-  
   // type: String, required: true, defaultValue: 'foo', validate: notBar 
-  assert(attributeName, 'Attribute name is illegal.');
+  assert(attributeName && attributeName.indexOf('$') !== 0, 'Attribute name is illegal.');
   assert(attributeDefinition.type, 'Type property is required for attribute ' + attributeName);
   assert.doesNotThrow(function () { new attributeDefinition.type(); }, 'Type does not name a type');
-  
-  assert.equal(typeof attributeDefinition.required, 'boolean');
   assert.notEqual(typeof attributeDefinition.defaultValue, 'undefined');
+  
+  if (typeof attributeDefinition.required !== 'undefined') {
+    assert.equal(typeof attributeDefinition.required, 'boolean');
+  } else {
+    attributeDefinition.required = false;
+  }
   
   if (typeof attributeDefinition.validate !== 'undefined') {
     assert(Array.isArray(attributeDefinition.validate));
@@ -47,6 +46,9 @@ function validateAttributeDefinition(attributeName, attributeDefinition) {
 module.exports = {
   
   createModel: function (properties) {
+    assert(typeof properties.$meta === 'object', 'Missing Model metas');
+    assert(typeof properties.$meta.name === 'string', 'Missing Model name in $meta');
+    
     var proto = {
       
       // properties are available from $model inside objects
@@ -55,7 +57,12 @@ module.exports = {
       $attributeDefinitions: _.omit(properties, ['$statics', '$meta', '$fns']),
       
       $validateAttributeValue: function validateAttributeValue(name, value) {
-        var validators = this.$attributeDefinitions[name].validate;
+        var def = this.$attributeDefinitions[name];
+        var validators = def.validate;
+        
+        if (def.required === true && (typeof value === 'undefined' || value === null)) {
+          throw new Error('cannot unset required attribute.');
+        }
         
         if (!validators) {
           return;
@@ -88,6 +95,14 @@ module.exports = {
             instance.$attributeValues[prop] = value;
           },
           
+          'delete': function (prop) {
+            if (instance.$model.$attributeDefinitions[prop].required !== true) {
+              delete instance.$attributeValues[prop];  //  or default value if not set
+            } else {
+              throw new Error('Cannot delete required attribute');
+            }
+          },
+          
           get: function (proxy, prop) {            
             if (typeof instance[prop] === 'function') {
               return instance[prop];
@@ -102,8 +117,16 @@ module.exports = {
             }            
             
             if (instance.$model.$attributeDefinitions.hasOwnProperty(prop)) {
-              return instance.$attributeValues[prop] ||     // return instance value
-                instance.$model.$attributeDefinitions[prop].defaultValue;  //  or default value if not set
+              if (typeof instance.$attributeValues[prop] !== 'undefined') {
+                return instance.$attributeValues[prop];
+              } else {
+                if (instance.$model.$attributeDefinitions[prop].required !== true) {
+                  return instance.$model.$attributeDefinitions[prop].defaultValue;  //  or default value if not set
+                } else {
+                  console.error('No value for required field (this should be only an internal error, file a bug if you see this).');
+                  return undefined;
+                }
+              }
             }
             
             throw new Error('Model has no attribute or callable named ' + prop);
@@ -113,6 +136,18 @@ module.exports = {
         Object.keys(attributeValues).forEach(function initialValues(attributeName) {
           instanceProxy[attributeName] = attributeValues[attributeName];
         });
+        
+        var requiredAttributes = Object.keys(instance.$model.$attributeDefinitions).filter(function (name) {
+          return instance.$model.$attributeDefinitions[name].required === true;
+        });
+        
+        var requiredAttributesOk = _.all(requiredAttributes, function (name) {
+          return typeof instanceProxy[name] !== 'undefined';
+        });
+        
+        if (!requiredAttributesOk) {
+          throw new Error('Missing required attribute(s).');
+        }
         
         return instanceProxy;
       },
