@@ -96,10 +96,11 @@ module.exports = {
           },
           
           'delete': function (prop) {
-            if (instance.$model.$attributeDefinitions[prop].required !== true) {
-              delete instance.$attributeValues[prop];  //  or default value if not set
-            } else {
+            if (instance.$model.$attributeDefinitions[prop].required === true) {
               throw new Error('Cannot delete required attribute');
+            } else {
+              delete instance.$attributeValues[prop];
+              return true;
             }
           },
           

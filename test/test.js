@@ -130,8 +130,8 @@ test('instance creation', function (t) {
     tt.throws(function () { delete myEvent.title; }, 'throws if attempting to delete a required one');
     tt.throws(function () { myEvent.title = undefined; }, 'throws if attempting to unset a required one');
     
-    tt.doesNotThrow(function () { delete myEvent.abstract; }, 'does not throw if attempting to unset an optional one');
-    tt.doesNotThrow(function () { myEvent.abstract = undefined; }, 'does not throw if attempting to delete an optional one');
+    tt.doesNotThrow(function () { delete myEvent.abstract; }, 'does not throw if attempting to delete an optional one');
+    tt.doesNotThrow(function () { myEvent.abstract = undefined; }, 'does not throw if attempting to unset an optional one');
     tt.equals(myEvent.abstract, modelConfig.abstract.defaultValue, 'and will get its default value');
     
     tt.end();
