@@ -51,7 +51,8 @@ module.exports = {
       
       // properties are available from $model inside objects
       $meta: properties.$meta,
-      $attributeDefinitions: _.omit(properties, ['$meta', '$statics']),
+      $fns: properties.$fns,
+      $attributeDefinitions: _.omit(properties, ['$statics', '$meta', '$fns']),
       
       $validateAttributeValue: function validateAttributeValue(name, value) {
         var validators = this.$attributeDefinitions[name].validate;
@@ -95,6 +96,10 @@ module.exports = {
             if (prop.indexOf('$') === 0) {
               return instance[prop];
             }
+            
+            if (typeof instance.$model.$fns[prop] === 'function') {
+              return instance.$model.$fns[prop];
+            }            
             
             if (instance.$model.$attributeDefinitions.hasOwnProperty(prop)) {
               return instance.$attributeValues[prop] ||     // return instance value

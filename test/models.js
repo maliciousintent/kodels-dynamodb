@@ -21,12 +21,14 @@ var EventModel = kodels.createModel({
   eventDateHuman: { type: Date, required: true, defaultValue: Date.now },
   abstract: { type: Date, required: true, defaultValue: Date.now },
   
-  displayTitle: function () {
-    return this.title.toUpperCase();
-  },
-  
-  addAttendee: function () {
-    return this.findAndModify(this._id, { attendees: { $add: 'Simone' }});
+  $fns: {
+    displayTitle: function () {
+      return this.title.toUpperCase();
+    },
+    
+    addAttendee: function () {
+      return this.findAndModify(this._id, { attendees: { $add: 'Simone' }});
+    },
   },
   
   $statics: {

@@ -12,7 +12,7 @@ var myEvent = new models.EventModel.create({
   abstract: 'Launching my wonderful mobile application <3'
 });
 
-console.log('title is', myEvent.title);
+console.log('title is', myEvent.displayTitle());
 myEvent.title = 'xyz!';
 myEvent.save();
 
