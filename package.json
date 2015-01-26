@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node --harmony ./node_modules/istanbul/lib/cli.js cover test/test.js && (cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true)"
+    "test": "node --harmony --harmony_proxies ./node_modules/istanbul/lib/cli.js cover test/test.js && (cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true)"
   },
   "repository": {
     "type": "git",
