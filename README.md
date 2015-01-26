@@ -2,7 +2,8 @@ kodels
 ========
 
 [![Build Status](https://travis-ci.org/plasticpanda/kodels.svg?branch=master)](https://travis-ci.org/plasticpanda/kodels) [![Coverage Status](https://img.shields.io/coveralls/plasticpanda/kodels.svg)](https://coveralls.io/r/plasticpanda/kodels?branch=master)
-[![Dependencies](https://david-dm.org/plasticpanda/kodels.svg)](https://david-dm.org/plasticpanda/kodels)  
+[![Dependencies](https://david-dm.org/plasticpanda/kodels.svg)](https://david-dm.org/plasticpanda/kodels)
+[![devDependency Status](https://david-dm.org/plasticpanda/kodels/dev-status.svg)](https://david-dm.org/plasticpanda/kodels#info=devDependencies)  
 [![NPM](https://nodei.co/npm/kodels.png)](https://nodei.co/npm/kodels/)
 
 
