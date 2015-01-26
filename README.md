@@ -7,9 +7,16 @@ kodels
 [![NPM](https://nodei.co/npm/kodels.png)](https://nodei.co/npm/kodels/)
 
 
-model-ish classes for co-monk (&amp; possibly others)
+Promised model-ish classes for MongoDB with strict getters and setters.
 
 For usage check the ```test``` folder.
+
+# TODO
+
+* Documentation
+* Add "type" check
+* Support for atomic updates
+* DynamoDB adapter
 
 # LICENSE
 
