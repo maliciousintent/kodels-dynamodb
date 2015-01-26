@@ -1,3 +1,4 @@
+
 'use strict';
 
 var test = require('tape');
@@ -131,6 +132,7 @@ test('mongodb driver', function (t) {
     
     eventData_.title = 'xyz!';
     t.deepEquals(myEvent.toObject(), eventData_, 'correctly implements .toObject');
+    t.deepEquals(myEvent.toString(), eventData_.toString(), 'correctly implements .toString');
     
     
     t.test('without some attributes', function (tt) {
@@ -138,7 +140,7 @@ test('mongodb driver', function (t) {
       
       eventData_ = _.cloneDeep(eventData);
       delete eventData_.title;
-      tt.throws(function () { new EventModel.create(eventData_); }, 'throws if attribute was required');
+      tt.throws(function () { new EventModel.create(eventData_); }, 'throws if attribute was required but not specified in the constructor');
       
       eventData_ = _.cloneDeep(eventData);
       delete eventData_.abstract;

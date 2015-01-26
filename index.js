@@ -56,7 +56,6 @@ function createModel(properties, connection) {
     $attributeDefinitions: _.omit(properties, ['$statics', '$meta', '$fns']),
     
     $validateAttributeValue: function validateAttributeValue(name, value, props) {
-      var instance = this;
       var def = this.$attributeDefinitions[name];
       assert.equal(typeof def, 'object', 'Attribute is not in model definition: ' + name);
       
@@ -179,11 +178,7 @@ function createModel(properties, connection) {
             if (typeof instance.$attributeValues[prop] !== 'undefined') {
               return instance.$attributeValues[prop];
             } else {
-              if (instance.$model.$attributeDefinitions[prop].required !== true) {
-                return instance.$model.$attributeDefinitions[prop].defaultValue;  //  or default value if not set
-              } else {
-                throw new Error('No default value for required field ' + prop);
-              }
+              return instance.$model.$attributeDefinitions[prop].defaultValue;  //  or default value if not set
             }
           }
           
@@ -200,11 +195,13 @@ function createModel(properties, connection) {
       });
       
       var requiredAttributesOk = _.all(requiredAttributes, function (name) {
-        return typeof instanceProxy[name] !== 'undefined';
+        // @warning we need to bypass proxy here, otherwise the default value is returned
+        // and this will never fail
+        return typeof instance.$attributeValues[name] !== 'undefined';
       });
       
       if (!requiredAttributesOk) {
-        throw new Error('Missing required attribute(s).');
+        throw new Error('Missing one of required attribute(s): ' + requiredAttributes.join(', '));
       }
       
       return instanceProxy;
