@@ -1,6 +1,6 @@
 {
   "name": "kodels",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "model-ish classes for co-monk (&amp; possibly others)",
   "main": "index.js",
   "directories": {
