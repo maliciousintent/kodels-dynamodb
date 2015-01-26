@@ -55,7 +55,8 @@ function createModel(properties, connection) {
     $fns: properties.$fns,
     $attributeDefinitions: _.omit(properties, ['$statics', '$meta', '$fns']),
     
-    $validateAttributeValue: function validateAttributeValue(name, value) {
+    $validateAttributeValue: function validateAttributeValue(name, value, props) {
+      var instance = this;
       var def = this.$attributeDefinitions[name];
       assert.equal(typeof def, 'object', 'Attribute is not in model definition: ' + name);
       
@@ -70,7 +71,7 @@ function createModel(properties, connection) {
       }
       
       validators.forEach(function (validatorFn) {
-        var result = validatorFn(value);
+        var result = validatorFn(value, props);
         
         if (!result) {
           throw new Error('validator fails: ' + validatorFn.name);
@@ -143,7 +144,7 @@ function createModel(properties, connection) {
           }
           
           try {
-            instance.$model.$validateAttributeValue(prop, value);
+            instance.$model.$validateAttributeValue(prop, value, instance.$attributeValues);
           } catch (validationError) {
             throw new Error('Attribute validation error for "' + prop + '" with message: ' + validationError.message);
           }
