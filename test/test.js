@@ -39,6 +39,37 @@ var modelConfig = {
 };
 
 
+  var MongoDriver = require('../adapters/dynamodb');
+  var ddb, coll;
+    ddb = new MongoDriver({});
+    coll = ddb.collection('events');
+    coll.find({ _id: 'aaa' }).then(function (data) {
+      console.log('resolve', data);
+    }, console.err);
+
+/*
+test('dynamodb driver', function (t) {
+  var MongoDriver = require('../adapters/dynamodb');
+  var ddb, coll;
+  
+  t.doesNotThrow(function () {
+    ddb = new MongoDriver({});
+  });
+  
+  t.doesNotThrow(function () {
+    coll = ddb.collection('events');
+  }, 'can create collection without errors');
+  
+  t.doesNotThrow(function () {
+    coll.find({ _id: 'aaa' }).then(function (data) {
+      console.log('resolve', data);
+    }, console.err);
+  });
+  
+  t.end();
+});
+
+
 test('mongodb driver', function (t) {
   var MongoDriver = require('../adapters/mongo');
   var mongo, coll;
