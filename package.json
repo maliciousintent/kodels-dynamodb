@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node --harmony --harmony_proxies ./node_modules/istanbul/lib/cli.js cover test/*.test.js && (cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true)"
+    "test": "node --harmony --harmony_proxies ./node_modules/tape/bin/tape test/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.1.8",
+    "covert": "^1.0.1",
     "debug": "^2.1.1",
     "lodash": "^3.0.0",
     "promised-mongo": "^0.11.1",
