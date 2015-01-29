@@ -1,3 +1,18 @@
+
+var test = require('tape');
+var async = require('async');
+var _ = require('lodash');
+
+var kodels = require('../');
+var modelConfig = require('./_fixtures').modelConfig;
+var makeDynamo   = require('./_fixtures').makeDynamo;
+var eventData   = require('./_fixtures').eventData;
+
+test('foo', function (t) {
+  t.skip('mock');
+  t.end();
+});
+
 /*
 
 test('dynamodb driver', function (t) {

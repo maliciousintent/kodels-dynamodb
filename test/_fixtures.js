@@ -49,6 +49,16 @@ module.exports.makeMongo = function () {
 };
 
 
+module.exports.makeDynamo = function () {
+  var DynamoDriver = require('../adapters/dynamodb');
+  var ddb = new DynamoDriver({});
+  var coll = ddb.collection('events');
+  coll.__db = ddb;
+  
+  return coll;
+};
+
+
 function notBar(value) {
   return value !== 'bar';
 }
