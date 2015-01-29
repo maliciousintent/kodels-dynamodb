@@ -19,6 +19,30 @@ DynamoDriver.prototype.collection = function(tableName) {
   return new Adapter(this.$db, tableName);
 };
 
+DynamoDriver.prototype.createTable = function(tableName, extraParams) {
+  var that = this;
+  
+  var params = {
+    TableName: tableName,
+    KeySchema:            [{ AttributeName: '_id', KeyType: 'HASH' }],
+    AttributeDefinitions: [{ AttributeName: '_id', AttributeType: 'S' }],
+    ProvisionedThroughput: { ReadCapacityUnits: 1, WriteCapacityUnits: 1 },
+  };
+  
+  if (typeof params !== 'undefined') {
+    _.merge(params, extraParams);
+  }
+  
+  return new Promise(function (resolve, reject) {
+    
+    that.$db.createTable(params, function (err, data) {
+      if (err) reject(err);
+      else resolve(data);
+    });
+    
+  });
+};
+
 DynamoDriver.prototype.close = function() {
   this.$db.close();
 };
@@ -61,6 +85,7 @@ Adapter.prototype.scan = function(filter, projection, limit) {
   if (typeof projection !== 'undefined') { params.AttributesToGet = projection; }
   if (typeof limit !== 'undefined') { params.Limit = limit; }
   
+  
   return new Promise(function (resolve, reject) {
     that.$db.scan(params, function (err, data) {
       if (err) reject(err);
@@ -73,7 +98,7 @@ Adapter.prototype.scan = function(filter, projection, limit) {
 
 Adapter.prototype.find = function(query, projection, limit) {
   assert.equal(typeof query, 'object', 'Parameter should be an object. Got ' + typeof query);
-  
+    
   if (_.isEqual(query, {})) {
     debug('Using Adapter#scan because query is empty');
     return this.scan(_.identity, projection, limit);
@@ -196,7 +221,7 @@ Adapter.prototype.save = function(doc) {
     
     params.AttributeUpdates[attrName] = {
       Action: 'PUT',
-      Value: { S: doc[attrName] }
+      Value: { S: doc[attrName] + '' }
     };
   });
   

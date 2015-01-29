@@ -14,7 +14,8 @@ test('model creation', function (t) {
   var EventModel = kodels.createModel(config_, coll);
   
   t.deepEquals(EventModel.$meta, config_.$meta, 'loads meta');
-  t.equals(EventModel.getPageTitle, modelConfig.$statics.getPageTitle, 'attaches static methods');
+  // static methods are now bond to the collection -- this test is broken
+  // t.equals(EventModel.getPageTitle, modelConfig.$statics.getPageTitle, 'attaches static methods');
   t.equals(EventModel.getPageTitle(), 'My events', 'statics methods work');
 
   t.test('without name', function (tt) {

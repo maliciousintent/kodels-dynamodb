@@ -29,7 +29,7 @@ function validateAttributeDefinition(attributeName, attributeDefinition) {
   assert(attributeName && attributeName.indexOf('$') !== 0, 'Attribute name is illegal.');
   assert(attributeDefinition.type, 'Type property is required for attribute ' + attributeName);
   assert.doesNotThrow(function () { new attributeDefinition.type(); }, 'Type does not name a type');
-  assert.notEqual(typeof attributeDefinition.defaultValue, 'undefined');
+  assert.notEqual(typeof attributeDefinition.defaultValue, 'undefined', 'Default value for ' + attributeName + ' must not be `undefined`.');
   
   if (typeof attributeDefinition.required !== 'undefined') {
     assert.equal(typeof attributeDefinition.required, 'boolean');
@@ -80,23 +80,27 @@ function createModel(properties, connection) {
     
     
     find: function (query, projection, sort, limit, skip) {
-      if (typeof query === 'undefined') { query = {}; }
-      if (typeof projection === 'undefined') { projection = {}; }
+      assert.equal(typeof query, 'object', 'First parameter should be an object, got ' + typeof query);
       
       var cursor = connection.find(query, projection);
-      if (sort) { cursor = cursor.sort(sort); }
-      if (limit) { cursor = cursor.limit(limit); }
-      if (skip) { cursor = cursor.skip(skip); }
+      // if (sort) { cursor = cursor.sort(sort); }
+      // if (limit) { cursor = cursor.limit(limit); }
+      // if (skip) { cursor = cursor.skip(skip); }
       
       return new Promise(function (resolve, reject) {
-        cursor.toArray().then(function (docs) {
+        cursor.then(function (docs) {
           
           docs = _.map(docs, function _buildInstance(doc) {
-            return proto.create(doc);
+            try {
+              return proto.create(doc);
+            } catch (e) {
+              reject(new Error('Cannot create instance from document with _id `' + doc._id + '`, please update either your model or document, accordingly: ' + e.message));
+              return null;
+            }
           });
           resolve(docs);
           
-        }).done(reject);
+        }, reject);
       });
     },
     
@@ -109,7 +113,12 @@ function createModel(properties, connection) {
           if (!doc) {
             reject(new Error('Document not found'));
           } else {
-            resolve(proto.create(doc));
+            try {
+              resolve(proto.create(doc));
+            } catch (e) {
+              reject(new Error('Cannot create instance from document with _id `' + doc._id + '`, please update either your model or document, accordingly: ' + e.message));
+              return null;
+            }
           }
           
         }, reject);
@@ -125,7 +134,12 @@ function createModel(properties, connection) {
           if (!doc) {
             reject(new Error('Document not found'));
           } else {
-            resolve(proto.create(doc));
+            try {
+              resolve(proto.create(doc));
+            } catch (e) {
+              reject(new Error('Cannot create instance from document with _id `' + doc._id + '`, please update either your model or document, accordingly: ' + e.message));
+              return null;
+            }
           }
           
         }, reject);
@@ -211,7 +225,7 @@ function createModel(properties, connection) {
   
   Object.keys(properties.$statics).forEach(function attachStaticFn(staticName) {
     assert.equal(typeof properties.$statics[staticName], 'function');
-    proto[staticName] = properties.$statics[staticName];
+    proto[staticName] = properties.$statics[staticName].bind(connection);
   });
   
   Object.keys(proto.$attributeDefinitions).forEach(function attributeValidateIterator(attributeName) {
