@@ -246,7 +246,7 @@ var IdField = { type: String, required: false, defaultValue: null, validate: [] 
 
 module.exports = {
   
-  MongoDriver: require('./adapters/mongo'),
+  DynamoDBDriver: require('./adapters/dynamodb'),
   createModel: createModel,
   isModelInstance: isModelInstance,
   IdField: IdField,
