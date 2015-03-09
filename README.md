@@ -1,13 +1,13 @@
-kodels
-========
+kodels-dynamodb
+===============
 
-[![Build Status](https://travis-ci.org/plasticpanda/kodels.svg?branch=master)](https://travis-ci.org/plasticpanda/kodels) [![Coverage Status](https://img.shields.io/coveralls/plasticpanda/kodels.svg)](https://coveralls.io/r/plasticpanda/kodels?branch=master)
-[![Dependencies](https://david-dm.org/plasticpanda/kodels.svg)](https://david-dm.org/plasticpanda/kodels)
-[![devDependency Status](https://david-dm.org/plasticpanda/kodels/dev-status.svg)](https://david-dm.org/plasticpanda/kodels#info=devDependencies)  
-[![NPM](https://nodei.co/npm/kodels.png)](https://nodei.co/npm/kodels/)
+[![Build Status](https://travis-ci.org/plasticpanda/kodels-dynamodb.svg?branch=master)](https://travis-ci.org/plasticpanda/kodels-dynamodb) [![Coverage Status](https://img.shields.io/coveralls/plasticpanda/kodels-dynamodb.svg)](https://coveralls.io/r/plasticpanda/kodels-dynamodb?branch=master)
+[![Dependencies](https://david-dm.org/plasticpanda/kodels-dynamodb.svg)](https://david-dm.org/plasticpanda/kodels-dynamodb)
+[![devDependency Status](https://david-dm.org/plasticpanda/kodels-dynamodb/dev-status.svg)](https://david-dm.org/plasticpanda/kodels-dynamodb#info=devDependencies)  
+[![NPM](https://nodei.co/npm/kodels-dynamodb.png)](https://nodei.co/npm/kodels-dynamodb/)
 
 
-Promised model-ish classes for MongoDB with strict getters and setters.
+Promised model-ish classes for DynamoDB with strict getters and setters.
 
 For usage check the ```test``` folder.
 
@@ -16,7 +16,6 @@ For usage check the ```test``` folder.
 * Documentation
 * Add "type" check
 * Support for atomic updates
-* DynamoDB adapter
 
 # LICENSE
 

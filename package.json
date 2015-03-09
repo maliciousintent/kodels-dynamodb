@@ -1,7 +1,7 @@
 {
-  "name": "kodels",
-  "version": "0.1.3",
-  "description": "model-ish classes for co-monk (&amp; possibly others)",
+  "name": "kodels-dynamodb",
+  "version": "0.1.4",
+  "description": "model-ish classes for AWS DynamoDB",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/plasticpanda/kodels.git"
+    "url": "https://github.com/plasticpanda/kodels-dynamodb.git"
   },
   "author": "Simone Lusenti <simone@plasticpanda.com>",
   "license": "GPLv3",
   "bugs": {
-    "url": "https://github.com/plasticpanda/kodels/issues"
+    "url": "https://github.com/plasticpanda/kodels-dynamodb/issues"
   },
-  "homepage": "https://github.com/plasticpanda/kodels",
+  "homepage": "https://github.com/plasticpanda/kodels-dynamodb",
   "devDependencies": {
     "async": "^0.9.0",
     "co": "^4.1.0",
@@ -33,7 +33,6 @@
     "covert": "^1.0.1",
     "debug": "^2.1.1",
     "lodash": "^3.0.0",
-    "promised-mongo": "^0.11.1",
     "shortid": "^2.1.3"
   },
   "engines": {
