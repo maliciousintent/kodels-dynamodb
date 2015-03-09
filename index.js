@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var assert = require('assert');
-var objectId = require('./adapters/mongo').ObjectId;
+var objectId = _.identity;
 
 function ModelInstance(model, connection) {  
   this.$isKodelsInstance = true;

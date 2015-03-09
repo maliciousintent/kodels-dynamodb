@@ -11,13 +11,18 @@ Promised model-ish classes for DynamoDB with strict getters and setters.
 
 For usage check the ```test``` folder.
 
-# TODO
+## Caveats
+
+* Requests will hang or time out ```Error: connect ETIMEDOUT``` if no AWS credentials are provided
+
+
+## Todo
 
 * Documentation
 * Add "type" check
 * Support for atomic updates
 
-# LICENSE
+## License
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 

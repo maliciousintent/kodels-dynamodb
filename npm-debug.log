@@ -1,0 +1,38 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node',
+1 verbose cli   '/home/simone/.nvm/versions/v0.12.0/bin/npm',
+1 verbose cli   'run',
+1 verbose cli   'test' ]
+2 info using npm@2.6.1
+3 info using node@v0.12.0
+4 verbose run-script [ 'pretest', 'test', 'posttest' ]
+5 info pretest kodels-dynamodb@0.1.4
+6 info test kodels-dynamodb@0.1.4
+7 verbose unsafe-perm in lifecycle true
+8 info kodels-dynamodb@0.1.4 Failed to exec test script
+9 verbose stack Error: kodels-dynamodb@0.1.4 test: `node --harmony --harmony_proxies ./node_modules/istanbul/lib/cli.js cover test/index.js && (cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true)`
+9 verbose stack Exit status 7
+9 verbose stack     at EventEmitter.<anonymous> (/home/simone/.nvm/versions/v0.12.0/lib/node_modules/npm/lib/utils/lifecycle.js:213:16)
+9 verbose stack     at EventEmitter.emit (events.js:110:17)
+9 verbose stack     at ChildProcess.<anonymous> (/home/simone/.nvm/versions/v0.12.0/lib/node_modules/npm/lib/utils/spawn.js:14:12)
+9 verbose stack     at ChildProcess.emit (events.js:110:17)
+9 verbose stack     at maybeClose (child_process.js:1008:16)
+9 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:1080:5)
+10 verbose pkgid kodels-dynamodb@0.1.4
+11 verbose cwd /home/simone/Repos/kodels-dynamodb
+12 error Linux 3.16.0-31-generic
+13 error argv "node" "/home/simone/.nvm/versions/v0.12.0/bin/npm" "run" "test"
+14 error node v0.12.0
+15 error npm  v2.6.1
+16 error code ELIFECYCLE
+17 error kodels-dynamodb@0.1.4 test: `node --harmony --harmony_proxies ./node_modules/istanbul/lib/cli.js cover test/index.js && (cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true)`
+17 error Exit status 7
+18 error Failed at the kodels-dynamodb@0.1.4 test script 'node --harmony --harmony_proxies ./node_modules/istanbul/lib/cli.js cover test/index.js && (cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true)'.
+18 error This is most likely a problem with the kodels-dynamodb package,
+18 error not with npm itself.
+18 error Tell the author that this fails on your system:
+18 error     node --harmony --harmony_proxies ./node_modules/istanbul/lib/cli.js cover test/index.js && (cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true)
+18 error You can get their info via:
+18 error     npm owner ls kodels-dynamodb
+18 error There is likely additional logging output above.
+19 verbose exit [ 1, true ]
