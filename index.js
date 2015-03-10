@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var assert = require('assert');
+var debug = require('debug')('kodels-dynamodb');
 var objectId = _.identity;
 
 function ModelInstance(model, connection) {  
@@ -196,7 +197,8 @@ function createModel(properties, connection) {
             }
           }
           
-          throw new Error('Model has no attribute or callable named ' + prop);
+          debug('Model has no attribute or callable named "%s"', prop);
+          return undefined;
         }
       });
 
