@@ -190,14 +190,14 @@ Adapter.prototype.find = function(query, projection, limit) {
 };
 
 
-Adapter.prototype.findOne = function(query) {
-  assertHashRange(query);
+Adapter.prototype.findOne = function(query, project) {
+  // assertHashRange(query);
   
   return new Promise(function (resolve, reject) {
-    this.find(query, {}, 1).then(function (rows) {
-      resolve(rows[1]);
+    this.find(query, project, 1).then(function (rows) {
+      resolve(rows[0]);
     }, reject);
-  });
+  }.bind(this));
 };
 
 
