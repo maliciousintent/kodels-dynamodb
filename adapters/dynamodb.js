@@ -96,6 +96,27 @@ Adapter.prototype.scan = function(filter, projection, limit) {
 };
 
 
+Adapter.prototype.query = function(params_to_merge) {
+  assert.equal(typeof params_to_merge, 'object', 'First argument to Adapter#query should be an object, got ' + typeof params_to_merge);
+  
+  var that = this;
+  var params = {
+    TableName: this.$tableName
+  };
+  
+  _.merge(params, params_to_merge);
+  debug('Adapter#query with params: %s', require('util').inspect(params, { depth: 5 }));
+  
+  return new Promise(function (resolve, reject) {
+    that.$db.query(params, function (err, data) {
+      if (err) reject(err);
+      else resolve(_.map(data.Items, _unpackTypes));
+    });
+  });
+  
+};
+
+
 Adapter.prototype.find = function(query, projection, limit) {
   assert.equal(typeof query, 'object', 'Parameter should be an object. Got ' + typeof query);
     
