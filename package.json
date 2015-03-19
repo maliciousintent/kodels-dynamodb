@@ -7,8 +7,6 @@
     "test": "test"
   },
   "scripts": {
-    "test-only": "node --harmony --harmony_proxies ./node_modules/tape/bin/tape test/*.test.js",
-    "test-old": "node --harmony --harmony_proxies ./node_modules/istanbul/lib/cli.js cover test/index.js && (cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true)",
     "test": "exit 0"
   },
   "repository": {
@@ -27,11 +25,11 @@
     "coveralls": "^2.11.2",
     "istanbul": "^0.3.5",
     "pre-commit": "0.0.9",
+    "covert": "^1.0.1",
     "tape": "^3.0.3"
   },
   "dependencies": {
     "aws-sdk": "^2.1.8",
-    "covert": "^1.0.1",
     "debug": "^2.1.1",
     "lodash": "^3.0.0",
     "shortid": "^2.1.3"
