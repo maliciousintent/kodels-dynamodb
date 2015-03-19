@@ -1,6 +1,6 @@
 {
   "name": "kodels-dynamodb",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "model-ish classes for AWS DynamoDB",
   "main": "index.js",
   "directories": {
