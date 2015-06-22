@@ -3,6 +3,7 @@ var _ = require('lodash');
 var AWS = require('aws-sdk');
 var shortId = require('shortid');
 var debug = require('debug')('kodels-dynamodb');
+var async = require('async');
 var assert = require('assert');
 var util = require('util');
 
@@ -86,11 +87,47 @@ Adapter.prototype.scan = function(filter, projection, limit) {
   if (typeof limit !== 'undefined') { params.Limit = limit; }
   
   
+
+  var itemsLeft = true;
+  var lastEvaluatedKey = null;
+  var items = [];
+
   return new Promise(function (resolve, reject) {
-    that.$db.scan(params, function (err, data) {
-      if (err) reject(err);
-      else resolve(_.filter(_.map(data.Items, _unpackTypes), filter));
+
+    async.whilst(function () { return itemsLeft; }, function (scanDone) {
+      if (lastEvaluatedKey) {
+        params.ExclusiveStartKey = lastEvaluatedKey;
+      } else {
+        if (params.ExclusiveStartKey) {
+          delete params.ExclusiveStartKey;
+        }
+      }
+
+      that.$db.scan(params, function (err, data) {
+        if (err) {
+          scanDone(err);
+          return;
+        }
+
+        if (data.LastEvaluatedKey) {
+          itemsLeft = true;
+          lastEvaluatedKey = data.LastEvaluatedKey;
+        } else {
+          itemsLeft = false;
+        }
+
+        items = items.concat(_.filter(_.map(data.Items, _unpackTypes), filter));
+        scanDone(null);
+      });
+    }, function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(items);
     });
+
   });
   
 };
