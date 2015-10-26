@@ -133,6 +133,32 @@ Adapter.prototype.scan = function(filter, projection, limit) {
 };
 
 
+Adapter.prototype.scanOneTime = function(filter, projection, limit) {
+  assert.equal(typeof filter, 'function', 'First argument to Adapter#scan should be a function, got ' + typeof filter);
+
+  var that = this;
+  var params = {
+    TableName: this.$tableName
+  };
+
+  if (typeof projection !== 'undefined') { params.AttributesToGet = projection; }
+  if (typeof limit !== 'undefined') { params.Limit = limit; }
+
+  return new Promise(function (resolve, reject) {
+
+    that.$db.scan(params, function (err, data) {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(_.filter(_.map(data.Items, _unpackTypes), filter));
+    });
+  });
+
+};
+
+
 Adapter.prototype.query = function(params_to_merge) {
   assert.equal(typeof params_to_merge, 'object', 'First argument to Adapter#query should be an object, got ' + typeof params_to_merge);
 
