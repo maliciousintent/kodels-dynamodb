@@ -162,6 +162,7 @@ Adapter.prototype.scanOneTime = function(filter, projection, limit) {
 Adapter.prototype.query = function(params_to_merge) {
   assert.equal(typeof params_to_merge, 'object', 'First argument to Adapter#query should be an object, got ' + typeof params_to_merge);
 
+
   var that = this;
   var params = {
     TableName: this.$tableName
@@ -170,11 +171,47 @@ Adapter.prototype.query = function(params_to_merge) {
   _.merge(params, params_to_merge);
   debug('Adapter#query with params: %s', require('util').inspect(params, { depth: 5 }));
 
+
+  var itemsLeft = true;
+  var lastEvaluatedKey = null;
+  var items = [];
+
   return new Promise(function (resolve, reject) {
-    that.$db.query(params, function (err, data) {
-      if (err) reject(err);
-      else resolve(_.map(data.Items, _unpackTypes));
+
+    async.whilst(function () { return itemsLeft; }, function (scanDone) {
+      if (lastEvaluatedKey) {
+        params.ExclusiveStartKey = lastEvaluatedKey;
+      } else {
+        if (params.ExclusiveStartKey) {
+          delete params.ExclusiveStartKey;
+        }
+      }
+
+      that.$db.query(params, function (err, data) {
+        if (err) {
+          scanDone(err);
+          return;
+        }
+
+        if (data.LastEvaluatedKey) {
+          itemsLeft = true;
+          lastEvaluatedKey = data.LastEvaluatedKey;
+        } else {
+          itemsLeft = false;
+        }
+
+        items = items.concat(_.map(data.Items, _unpackTypes));
+        scanDone(null);
+      });
+    }, function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(items);
     });
+
   });
 
 };
